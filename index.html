@@ -6,95 +6,89 @@
   <title>FIRE HORSE // 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      --bg: #0B0B0F;
+    :root{
+      --bg:#0B0B0F;
       --panel: rgba(255,255,255,0.06);
-      --stroke: rgba(255,255,255,0.10);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.65);
-      --ember: rgba(255, 90, 31, 0.95);
-      --gold: rgba(255, 196, 100, 0.95);
+      --stroke: rgba(255,255,255,0.12);
     }
-    body { background: radial-gradient(1200px 800px at 60% 30%, rgba(255, 90, 31, 0.10), transparent 55%),
-                      radial-gradient(900px 700px at 30% 70%, rgba(255, 196, 100, 0.08), transparent 60%),
-                      var(--bg); color: var(--text); }
-    .glass { background: var(--panel); border: 1px solid var(--stroke); backdrop-filter: blur(10px); }
-    .hairline { border-color: var(--stroke); }
-    .btn {
-      background: linear-gradient(135deg, rgba(255,90,31,0.20), rgba(255,196,100,0.14));
-      border: 1px solid rgba(255,255,255,0.14);
-      transition: transform 120ms ease, filter 120ms ease;
+    body{
+      background:
+        radial-gradient(1200px 800px at 60% 30%, rgba(255, 90, 31, 0.10), transparent 55%),
+        radial-gradient(900px 700px at 30% 70%, rgba(255, 196, 100, 0.08), transparent 60%),
+        var(--bg);
     }
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
-    .btn:active { transform: translateY(0px) scale(0.99); }
-    .tab {
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
+    .glass{ background: var(--panel); border:1px solid var(--stroke); backdrop-filter: blur(10px); }
+    .smallcaps{ letter-spacing: .22em; text-transform: uppercase; }
+    #embers{ pointer-events:none; }
+
+    /* Envelope interactions */
+    .envelopeBtn { transition: transform 120ms ease, filter 120ms ease; }
+    .envelopeBtn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .envelopeBtn:active { transform: translateY(0px) scale(0.99); }
+
+    @keyframes shake {
+      0%,100%{ transform: rotate(0deg); }
+      20%{ transform: rotate(-2deg); }
+      40%{ transform: rotate(2deg); }
+      60%{ transform: rotate(-1deg); }
+      80%{ transform: rotate(1deg); }
     }
-    .tab[data-active="true"]{
-      background: linear-gradient(135deg, rgba(255,90,31,0.20), rgba(255,196,100,0.14));
-      border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 0 0 1px rgba(255,90,31,0.08) inset;
+    .shake { animation: shake 280ms ease-in-out; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .resultGlow {
-      box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.12) inset,
-                  0 25px 80px rgba(255, 90, 31, 0.12);
-    }
-    .smallcaps { letter-spacing: 0.22em; text-transform: uppercase; }
-    /* Subtle heat shimmer on the horse */
+    .cardIn { animation: cardIn 240ms ease-out both; }
+
+    /* Fire Horse shimmer */
     @keyframes shimmer {
-      0%, 100% { filter: drop-shadow(0 0 18px rgba(255,90,31,0.16)) drop-shadow(0 0 38px rgba(255,196,100,0.08)); opacity: 0.92; transform: translateY(0px); }
-      50% { filter: drop-shadow(0 0 24px rgba(255,90,31,0.22)) drop-shadow(0 0 60px rgba(255,196,100,0.10)); opacity: 1; transform: translateY(-1px); }
+      0%,100% { filter: drop-shadow(0 0 18px rgba(255,90,31,0.14)) drop-shadow(0 0 34px rgba(255,196,100,0.08)); opacity: 0.92; }
+      50% { filter: drop-shadow(0 0 26px rgba(255,90,31,0.22)) drop-shadow(0 0 58px rgba(255,196,100,0.11)); opacity: 1; }
     }
     .horse { animation: shimmer 3.4s ease-in-out infinite; }
 
-    /* Gentle card reveal */
-    @keyframes reveal {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    .resultGlow{
+      box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.12) inset,
+                  0 25px 80px rgba(255, 90, 31, 0.12);
     }
-    .reveal { animation: reveal 240ms ease-out both; }
-
-    /* Make canvas not steal clicks */
-    #embers { pointer-events: none; }
   </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen text-white/90">
   <canvas id="embers" class="fixed inset-0 w-full h-full"></canvas>
 
-  <main class="relative mx-auto max-w-6xl px-4 py-10">
-    <!-- Header -->
+  <main class="relative mx-auto max-w-5xl px-4 py-12">
     <header class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-      <div class="space-y-2">
-        <div class="smallcaps text-xs text-white/70">Lunar New Year</div>
-        <h1 class="text-3xl md:text-5xl font-semibold tracking-tight">
+      <div>
+        <div class="smallcaps text-xs text-white/65">Lunar New Year</div>
+        <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mt-2">
           FIRE HORSE <span class="text-white/55">// 2026</span>
         </h1>
-        <p class="text-white/70 max-w-xl">
-          Pull a fortune, measure your luck, mirror your zodiac, or check your ex —
-          all under Fire Horse energy.
+        <p class="text-white/65 mt-3 max-w-xl">
+          Open the red envelope to receive your fortune.
         </p>
       </div>
 
       <div class="glass rounded-2xl p-4 md:p-5 w-full md:w-[420px]">
         <div class="flex items-center justify-between">
-          <div class="smallcaps text-[11px] text-white/70">Fire Horse Directive</div>
-          <button id="newDirectiveBtn" class="text-xs text-white/70 hover:text-white">refresh</button>
+          <div class="smallcaps text-[11px] text-white/60">Fire Horse Directive</div>
+          <button id="newDirectiveBtn" class="text-xs text-white/60 hover:text-white">refresh</button>
         </div>
         <div id="directive" class="mt-2 text-lg font-medium leading-snug">
           Move first. Refine after.
         </div>
-        <div class="mt-3 text-xs text-white/55">
-        Tip: hit <span class="text-white/70">Share</span> after you get a card screenshot-worthy result.
+        <div class="mt-3 text-xs text-white/50">
+          Keep what’s true. Burn what isn’t.
         </div>
       </div>
     </header>
 
-    <!-- Hero + Controls -->
     <section class="mt-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
-      <!-- Horse Hero -->
-      <div class="glass rounded-3xl p-6 lg:col-span-2 relative overflow-hidden">
-        <div class="mt-4 flex items-center justify-center">
+      <!-- Left: Fire horse hero -->
+      <div class="glass rounded-3xl p-6 lg:col-span-2 overflow-hidden">
+        <div class="smallcaps text-[11px] text-white/60">Fire Horse</div>
+
+        <div class="mt-5 flex items-center justify-center">
           <!-- Minimal horse silhouette SVG -->
           <svg class="horse w-[260px] md:w-[320px]" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fire Horse silhouette">
             <defs>
@@ -116,81 +110,103 @@
               </filter>
             </defs>
 
-            <!-- Ultra-minimal “horse” path (stylized) -->
             <path filter="url(#softGlow)"
-              d="M170 60c-8 10-18 16-30 18-6 1-12 1-18 0 4 7 6 14 6 21 0 10-4 19-10 27 10 3 20 9 28 18 8 9 12 20 12 33v34h-20v-32c0-10-3-18-8-24-7-8-16-12-27-12h-10c-11 0-20 4-27 12-5 6-8 14-8 24v32H58v-34c0-23 8-42 24-56 8-7 17-12 27-14-6-8-10-17-10-27 0-9 3-17 8-24-6-2--17-11-6-6-10-13-12-22 10 1 20-2 28-8 7-6 12-14 13-24 7 6 16 9 26 9 10 0 19-3 27-9 1 10 5 18 11 24 7 7 16 10 25 10z"
+              d="M170 60c-8 10-18 16-30 18-6 1-12 1-18 0 4 7 6 14 6 21 0 10-4 19-10 27 10 3 20 9 28 18 8 9 12 20 12 33v34h-20v-32c0-10-3-18-8-24-7-8-16-12-27-12h-10c-11 0-20 4-27 12-5 6-8 14-8 24v32H58v-34c0-23 8-42 24-56 8-7 17-12 27-14-6-8-10-17-10-27 0-9 3-17 8-24-6-2-12-6-17-11-6-6-10-13-12-22 10 1 20-2 28-8 7-6 12-14 13-24 7 6 16 9 26 9 10 0 19-3 27-9 1 10 5 18 11 24 7 7 16 10 25 10z"
               fill="url(#emberGrad)" opacity="0.95"/>
-
-            <!-- Small mane accent -->
             <path d="M147 53c-6 5-12 8-18 9 3-7 4-13 3-19 6 4 11 7 15 10z" fill="rgba(255,255,255,0.10)"/>
           </svg>
         </div>
 
-        <div class="mt-6 flex gap-2">
-          <button id="shareBtn" class="btn rounded-2xl px-4 py-2 text-sm font-medium">Share</button>
-          <button id="resetBtn" class="rounded-2xl px-4 py-2 text-sm text-white/70 border hairline hover:text-white">Reset</button>
-        </div>
-        <div id="shareHint" class="mt-2 text-xs text-white/55 hidden">
-          Screenshot the result card for maximum drama ✨
+        <div class="mt-6 text-sm text-white/65">
+          Charcoal · ember · gold.
         </div>
       </div>
 
-      <!-- App Panel -->
+      <!-- Right: Envelope + Result -->
       <div class="lg:col-span-3 space-y-4">
-        <!-- Tabs -->
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="fortune" data-active="true">Fortune</button>
-          <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="luck">Luck</button>
-          <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="zodiac">Zodiac</button>
-          <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="ex">Ex</button>
-        </div>
-
-        <!-- Inputs -->
         <div class="glass rounded-3xl p-6">
           <div class="flex items-center justify-between">
-          <div>
-              <div id="modeTitle" class="text-xl font-semibold">Shake the Fortune</div>
-              <div id="modeDesc" class="text-sm text-white/70 mt-1">Click to reveal your Fire Horse fortune card.</div>
+            <div>
+              <div class="text-xl font-semibold">Red Envelope</div>
+              <div class="text-sm text-white/65 mt-1">Open to reveal your fortune.</div>
             </div>
           </div>
 
-          <div id="inputs" class="mt-5 space-y-4">
-            <!-- Dynamic inputs injected here -->
-          </div>
+          <div class="mt-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+            <!-- Envelope button -->
+            <div class="flex items-center gap-4">
+              <button id="envelopeBtn" class="envelopeBtn rounded-3xl p-0 bg-transparent" aria-label="Open red envelope">
+                <!-- Envelope SVG -->
+                <svg width="170" height="130" viewBox="0 0 170 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="envGrad" x1="20" y1="10" x2="150" y2="120" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="rgba(225,29,72,0.95)"/>
+                      <stop offset="1" stop-color="rgba(185,28,28,0.92)"/>
+                    </linearGradient>
+                    <linearGradient id="foil" x1="50" y1="25" x2="120" y2="105" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="rgba(255,196,100,0.95)"/>
+                      <stop offset="1" stop-color="rgba(255,90,31,0.85)"/>
+                    </linearGradient>
+                  </defs>
 
-          <div class="mt-5 flex gap-2">
-            <button id="goBtn" class="btn rounded-2xl px-4 py-2 text-sm font-medium">Reveal</button>
+                  <rect x="12" y="18" width="146" height="98" rx="18" fill="url(#envGrad)" stroke="rgba(255,255,255,0.18)"/>
+                  <path d="M24 38c22 20 41 33 61 43 20-10 39-23 61-43" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-linecap="round" />
+                  <path d="M24 100c21-18 41-30 61-38 20 8 40 20 61 38" stroke="rgba(0,0,0,0.18)" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+                  <circle cx="85" cy="72" r="16" fill="url(#foil)" opacity="0.95"/>
+                  <path d="M76 72h18" stroke="rgba(0,0,0,0.18)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+              <div class="text-sm text-white/65">
+                <div class="smallcaps text-[11px] text-white/55">Fortune</div>
+                <div class="mt-1">What you accept becomes your year.</div>
+              </div>
+            </div>
+
+            <div class="flex gap-2">
+              <button id="rerollBtn" class="rounded-2xl px-4 py-2 text-sm text-white/70 border border-white/15 hover:text-white">
+                Reroll
+              </button>
+              <button id="shareBtn" class="rounded-2xl px-4 py-2 text-sm font-medium"
+                style="background:linear-gradient(135deg, rgba(255,90,31,0.22), rgba(255,196,100,0.14)); border:1px solid rgba(255,255,255,0.14);">
+                Share
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Result -->
+        <!-- Result card -->
         <div id="resultCard" class="glass rounded-3xl p-6 resultGlow hidden">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <div class="smallcaps text-[11px] text-white/65">Fire Horse Card</div>
-              <div id="resultHeadline" class="text-2xl font-semibold mt-1">—</div>
+              <div class="smallcaps text-[11px] text-white/60">Fortune Card</div>
+              <div class="text-2xl font-semibold mt-1">FIRE HORSE · 2026</div>
             </div>
-            <div class="text-xs text-white/60 text-right">
-              <div id="resultMetaTop">2026</div>
-              <div id="resultMetaBottom">Ember · Gold</div>
+            <div class="text-xs text-white/55 text-right">
+              <div>Ember · Gold</div>
+              <div id="stamp">—</div>
             </div>
           </div>
 
-          <div id="resultBody" class="mt-4 text-white/80 leading-relaxed"></div>
+          <div id="fortuneText" class="mt-4 text-white/80 leading-relaxed text-[15px]"></div>
 
-          <div class="mt-5 border-t hairline pt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+          <div class="mt-5 border-t border-white/10 pt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
             <div>
-              <div class="smallcaps text-[11px] text-white/60">Lucky</div>
-              <div id="luckyLine" class="mt-1 text-white/80">—</div>
+              <div class="smallcaps text-[11px] text-white/55">Lucky</div>
+              <div id="lucky" class="mt-1 text-white/80">—</div>
             </div>
             <div>
-              <div class="smallcaps text-[11px] text-white/60">Avoid</div>
-              <div id="avoidLine" class="mt-1 text-white/80">—</div>
+              <div class="smallcaps text-[11px] text-white/55">Avoid</div>
+              <div id="avoid" class="mt-1 text-white/80">—</div>
             </div>
             <div>
-              <div class="smallcaps text-[11px] text-white/60">Directive</div>
-              <div id="directiveLine" class="text-white/80">—</div>
+              <div class="smallcaps text-[11px] text-white/55">Directive</div>
+              <div id="directiveLine" class="mt-1 text-white/80">—</div>
             </div>
+          </div>
+
+          <div class="mt-4 text-xs text-white/50">
+            Keep it close. Let it guide you.
           </div>
         </div>
       </div>
@@ -198,401 +214,194 @@
   </main>
 
   <script>
-    // ----------------------------
-    // Data packs (edit freely)
-    // ----------------------------
+    // ---------- Copy (romantic + savage) ----------
     const directives = [
       "Move first. Refine after.",
       "Heat reveals truth.",
       "Choose speed over perfection.",
-      "Say less. Ship more.",
-      "If it scares you, it’s probably correct.",
+      "Say less. Do more.",
+      "Stop negotiating with hesitation.",
       "No more almost. Only done.",
       "Be bold. Be brief. Be gone.",
-      "You don’t need permission. You need momentum.",
-      "Stop negotiating with hesitation.",
-      "Make it real — then make it beautiful."
+      "Make it real — then make it beautiful.",
+      "If it’s not reciprocal, it’s not sacred.",
+      "Let the wrong ones burn."
     ];
 
+    // 60 fortunes (romantic + savage)
     const fortunes = [
-      "A small risk becomes a large reward — but only if you move this week.",
-      "A new collaborator appears when you post the thing you’re overthinking.",
-      "Your ‘throwaway’ idea becomes someone else’s obsession.",
-      "The Fire Horse favors bold launches and clean exits.",
-      "You’ll cut one distraction and gain ten hours of peace.",
-      "You’ll be underestimated — which is exactly your advantage.",
-      "Someone is about to match your energy. Don’t dim first.",
-      "A lucky coincidence is just prepared momentum."
+      "A love that feels calm is not boring — it’s safe. Choose it.",
+      "You will be adored the moment you stop accepting crumbs.",
+      "Your softness is expensive. Don’t discount it for convenience.",
+      "Someone wants you — but they want access more than devotion. Test them.",
+      "The next person you kiss will shift something in your life.",
+      "You are not hard to love. You are hard to manipulate.",
+      "If they wanted you, you would not be guessing.",
+      "This year, you stop translating mixed signals into hope.",
+      "A bold confession is coming. Receive it like you deserve it.",
+      "Your heart is not a group project. Stop carrying the whole thing.",
+      "Fire Horse energy favors the brave — say what you mean.",
+      "Your glow returns when you stop chasing what runs.",
+      "You will outgrow someone who once felt like fate.",
+      "A clean ending is a luxury. Give it to yourself.",
+      "One person will be obsessed. Make sure they are worthy.",
+      "Romance finds you when you stop auditioning.",
+      "You will be chosen loudly — no secrecy, no ambiguity.",
+      "Your standards will cost you some people. Good.",
+      "You are entering your era of being met, not managed.",
+      "This year, you only entertain effort that matches your elegance.",
+      "Someone you’re forgetting is still thinking of you. Keep forgetting.",
+      "You will fall in love with your own life first — and that changes everything.",
+      "A message arrives when you stop checking your phone.",
+      "If they only love you when you’re easy, that’s not love.",
+      "You are not too much. You are just not for the weak.",
+      "You will be pursued by someone who has nothing to prove and everything to offer.",
+      "Your silence will speak louder than your explanations ever did.",
+      "A door closes. Your peace opens.",
+      "You won’t have to beg this year. You won’t even want to.",
+      "You are about to become unforgettable to someone who tried to forget you.",
+      "You are not a lesson. You are a destination.",
+      "The right person will not require you to shrink.",
+      "If they hesitate, let them lose you with full clarity.",
+      "This year you stop romanticizing potential and start requiring proof.",
+      "A new love enters like a warm coat — effortless and correct.",
+      "You’ll be tempted by intensity. Choose consistency instead.",
+      "You are magnetic when you are unattached to the outcome.",
+      "Someone will offer you devotion — accept it without suspicion.",
+      "Your future self is grateful you walked away when you did.",
+      "A love story is possible — but not with someone who can’t show up.",
+      "You will be cherished in public and protected in private.",
+      "Stop feeding people who are starving you.",
+      "Your boundaries will attract the right kind of hungry.",
+      "You are done being the “almost.”",
+      "This year, love becomes simple: effort, honesty, presence.",
+      "If they disappear, let them stay gone. That is the blessing.",
+      "A serious offer appears after you stop entertaining unserious behavior.",
+      "You are not “waiting.” You are selecting.",
+      "You will be kissed like a promise, not a maybe.",
+      "Don’t confuse attention with intention. Demand both.",
+      "A powerful connection arrives — and it won’t cost your dignity.",
+      "The one who is for you will make it obvious.",
+      "You are entering your era of being spoiled emotionally.",
+      "Your standards are not arrogance. They are alignment.",
+      "Someone wants to build with you — not just consume you.",
+      "If they can’t meet you, they don’t get to reach you.",
+      "Your love life improves when you stop explaining yourself to the wrong people.",
+      "This year, you don’t chase. You choose.",
+      "A slow-burning romance turns into a lifetime kind of thing.",
+      "Fire Horse blessing: you move fast — but you move correctly."
     ];
 
-    // Simple zodiac mapping for convenience (you can expand copy live)
-    const zodiacAnimals = [
-      { animal: "Rat", years: [2020, 2008, 1996, 1984, 1972, 1960] },
-      { animal: "Ox", years: [2021, 2009, 1997, 1985, 1973, 1961] },
-      { animal: "Tiger", years: [2022, 2010, 1998, 1986, 1974, 1962] },
-      { animal: "Rabbit", years: [2023, 2011, 1999, 1987, 1975, 1963] },
-      { animal: "Dragon", years: [2024, 2012, 2000, 1988, 1976, 1964] },
-      { animal: "Snake", years: [2025, 2013, 2001, 1989, 1977, 1965] },
-      { animal: "Horse", years: [2026, 2014, 2002, 1990, 1978, 1966] },
-      { animal: "Goat", years: [2027, 2015, 2003, 1991, 1979, 1967] },
-      { animal: "Monkey", years: [2028, 2016, 2004, 1992, 1980, 1968] },
-      { animal: "Rooster", years: [2029, 2017, 2005, 1993, 1969] },
-      { animal: "Dog", years: [2030, 2018, 2006, 1994, 1982, 1970] },
-      { animal: "Pig", years: [2031, 2019, 2007, 1995, 1983, 1971] },
-    ];
-
-    const zodiacVibes = {
-      Rat: "Quick mind. Fire Horse year rewards decisive action, not anxious loops.",
-      Ox: "Steady power. Fire Horse year asks you to sprint in short bursts.",
-      Tiger: "Bold heart. Fire Horse year amplifies your leadership — use it cleanly.",
-      Rabbit: "Soft strength. Fire Horse year: protect peace, keep boundaries sharp.",
-      Dragon: "Main character energy. Fire Horse year: pick one big thing and dominate it.",
-      Snake: "Strategic elegance. Fire Horse year: stop waiting for perfect timing.",
-      Horse: "You’re in your element. Fire Horse year: go fast, but don’t burn out.",
-      Goat: "Creative intuition. Fire Horse year: structure your art so it ships.",
-      Monkey: "Chaos genius. Fire Horse year: channel it into one finished product.",
-      Rooster: "Precision + pride. Fire Horse year: publish before you polish.",
-      Dog: "Loyal + direct. Fire Horse year: choose people who choose you back.",
-      Pig: "Warm abundance. Fire Horse year: say no to energy vampires."
-    };
-
-    const exVerdicts = [
-      { verdict: "NO.", body: "They miss the vibe, not the responsibility. Keep it moving." },
-      { verdict: "YES… but don’t clap.", body: "Fire Horse warning: they return for dopamine. Require devotion." },
-      { verdict: "ONLY IF Mercury does parkour.", body: "Translation: it’s not happening. Add them to your ‘never again’ archive." },
-      { verdict: "YES, briefly.", body: "A cameo. Not a season. Don’t give them the renewal contract." },
-      { verdict: "NO (respectfully).", body: "You’re ahead of them now. That’s why it feels quiet." }
-    ];
-
-    const luckyColors = ["Ember Red", "Molten Gold", "Charcoal Black", "Cherry Lacquer"];
+    const luckyColors = ["Ember Red", "Molten Gold", "Cherry Lacquer", "Black Silk", "Pearl White"];
     const luckyNumbers = ["8", "18", "28", "88", "108", "3", "13"];
     const avoids = [
-      "situationship math",
-      "doom scrolling",
-      "impulse spending (except couture)",
-      "over-explaining",
-      "shipping ‘later’",
-      "people who say “trust me”"
+      "mixed signals",
+      "late-night nostalgia",
+      "people who don’t plan",
+      "secret relationships",
+      "explaining your worth",
+      "second chances without change"
     ];
 
-    // ----------------------------
-    // Modes config
-    // ----------------------------
-    const modes = {
-      fortune: {
-        title: "Your Fortune",
-        desc: "Click to reveal your Fire Horse fortune card.",
-        inputs: () => `
-          <div class="text-white/70 text-sm">
-            Click <span class="text-white/90 font-medium">Reveal</span> to pull your fortune.
-          </div>
-        `,
-        generate: () => {
-          const fortune = pick(fortunes);
-          return {
-            headline: "Fortune pulled.",
-            body: fortune,
-            lucky: `${pick(luckyColors)} · ${pick(luckyNumbers)}`,
-            avoid: pick(avoids),
-          };
-        }
-      },
+    // ---------- UI ----------
+    const envelopeBtn = document.querySelector("#envelopeBtn");
+    const rerollBtn = document.querySelector("#rerollBtn");
+    const shareBtn = document.querySelector("#shareBtn");
+    const newDirectiveBtn = document.querySelector("#newDirectiveBtn");
 
-      luck: {
-        title: "Luck Index",
-        desc: "Measure your luck aura. Fire Horse energy loves bold, clean moves.",
-        inputs: () => `
-          <div class="space-y-2">
-            <label class="text-xs text-white/60 smallcaps">How chaotic are you right now?</label>
-            <input id="chaos" type="range" min="0" max="100" value="55" class="w-full">
-            <div class="flex justify-between text-xs text-white/55">
-              <span>calm</span><span>unhinged</span>
-            </div>
-          </div>
-          <div class="space-y-2">
-            <label class="text-xs text-white/60 smallcaps">Focus</label>
-            <select id="focus" class="w-full rounded-2xl bg-white/5 border hairline px-3 py-2 text-sm">
-              <option value="money">Money</option>
-              <option value="romance">Romance</option>
-              <option value="career">Career</option>
-            </select>
-          </div>
-        `,
-        generate: () => {
-          const chaos = clamp(parseInt(q("#chaos")?.value ?? "55", 10), 0, 100);
-          const focus = q("#focus")?.value ?? "money";
-          const base = Math.round((100 - Math.abs(55 - chaos)) * 0.92); // peak luck near 55 chaos (fun)
-          const jitter = randInt(-10, 10);
-          const score = clamp(base + jitter, 0, 100);
+    const resultCard = document.querySelector("#resultCard");
+    const fortuneText = document.querySelector("#fortuneText");
+    const lucky = document.querySelector("#lucky");
+    const avoid = document.querySelector("#avoid");
+    const directiveLine = document.querySelector("#directiveLine");
+    const directive = document.querySelector("#directive");
+    const stamp = document.querySelector("#stamp");
 
-          const lines = {
-            money: [
-              "Your luck runs hot. Make one clean bet, not five messy ones.",
-              "A small, fast launch beats a perfect, late masterpiece.",
-              "Cut one expense. Redirect it into momentum."
-            ],
-            romance: [
-              "High heat: you attract attention. Filter for seriousness.",
-              "Don’t chase — choose.",
-              "Your softness is power. Your boundaries are luxury."
-            ],
-            career: [
-              "Fire Horse favors decisive builders. Publish the work.",
-              "One project. One sprint. One win.",
-              "Say yes to visibility. No distraction."
-            ]
-          };
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-          return {
-            headline: `Luck Score: ${score}/100`,
-            body: pick(lines[focus]),
-            lucky: `${pick(luckyColors)} · ${pick(luckyNumbers)}`,
-            avoid: score > 65 ? "hesitation" : "overcommitting",
-          };
-        }
-      },
+    function reveal(){
+      envelopeBtn.classList.remove("shake");
+      void envelopeBtn.offsetWidth;
+      envelopeBtn.classList.add("shake");
 
-      zodiac: {
-        title: "Zodiac Mirror",
-        desc: "Enter your birth year for a quick, playful mirror (not that serious).",
-        inputs: () => `
-          <div class="space-y-2">
-            <label class="text-xs text-white/60 smallcaps">Birth year</label>
-            <input id="birthYear" inputmode="numeric" placeholder="e.g. 1996"
-              class="w-full rounded-2xl bg-white/5 border hairline px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/20">
-            <div class="text-xs text-white/50">Tip: if you want, you can fake it on stream and pick any year 😌</div>
-          </div>
-        `,
-        generate: () => {
-          const year = parseInt(q("#birthYear")?.value ?? "", 10);
-          const animal = isFinite(year) ? getZodiacAnimal(year) : pick(Object.keys(zodiacVibes));
-          const vibe = zodiacVibes[animal] ?? "You’re mysterious. Fire Horse year says: move anyway.";
-
-          return {
-            headline: `You read as: ${animal}`,
-            body: vibe,
-            lucky: `${pick(luckyColors)} · ${pick(luckyNumbers)}`,
-            avoid: pick(avoids),
-          };
-        }
-      },
-
-      ex: {
-        title: "Will Your Ex Come Back?",
-        desc: "A chaotic Fire Horse check (for entertainment purposes only).",
-        inputs: () => `
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            ${yn("blocked", "Did you block them?")}
-            ${yn("stories", "Do they watch your stories?")}
-            ${yn("text", "Do they text “I’ve been thinking”?")}
-          </div>
-        `,
-        generate: () => {
-          const blocked = q("#blocked")?.value ?? "no";
-          const stories = q("#stories")?.value ?? "no";
-          const text = q("#text")?.value ?? "no";
-
-          // Lightweight “logic” + randomness
-          let bias = 0;
-          if (blocked === "yes") bias -= 2;
-          if (stories === "yes") bias += 2;
-          if (text === "yes") bias += 2;
-
-          const roll = randInt(-2, 2) + bias;
-          let pickSet = exVerdicts;
-
-          if (roll >= 3) pickSet = exVerdicts.filter(v => v.verdict.startsWith("YES"));
-          if (roll <= -1) pickSet = exVerdicts.filter(v => v.verdict.startsWith("NO"));
-
-          const out = pick(pickSet.length ? pickSet : exVerdicts);
-
-          return {
-            headline: out.verdict,
-            body: out.body,
-            lucky: `Best reply: “Wishing you well.”`,
-            avoid: "late-night nostalgia",
-          };
-        }
-      }
-    };
-
-    // ----------------------------
-    // UI wiring
-    // ----------------------------
-    let currentMode = "fortune";
-
-    const modeTitle = q("#modeTitle");
-    const modeDesc = q("#modeDesc");
-    const inputs = q("#inputs");
-    const goBtn = q("#goBtn");
-
-    const resultCard = q("#resultCard");
-    const resultHeadline = q("#resultHeadline");
-    const resultBody = q("#resultBody");
-    const luckyLine = q("#luckyLine");
-    const avoidLine = q("#avoidLine");
-    const directiveLine = q("#directiveLine");
-
-    function renderMode(modeKey) {
-      currentMode = modeKey;
-      // tabs
-      qa(".tab").forEach(btn => btn.dataset.active = String(btn.dataset.mode === modeKey));
-     // text
-      modeTitle.textContent = modes[modeKey].title;
-      modeDesc.textContent = modes[modeKey].desc;
-      // inputs
-      inputs.innerHTML = modes[modeKey].inputs();
-      // hide old result until user reveals
-    }
-
-    function reveal() {
-      const out = modes[currentMode].generate();
-      resultHeadline.textContent = out.headline;
-      resultBody.textContent = out.body;
-      luckyLine.textContent = out.lucky;
-      avoidLine.textContent = out.avoid;
+      fortuneText.textContent = pick(fortunes);
+      lucky.textContent = `${pick(luckyColors)} · ${pick(luckyNumbers)}`;
+      avoid.textContent = pick(avoids);
       directiveLine.textContent = pick(directives);
+      stamp.textContent = new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
 
       resultCard.classList.remove("hidden");
-      resultCard.classList.remove("reveal");
-      void resultCard.offsetWidth; // reflow to retrigger animation
-      resultCard.classList.add("reveal");
+      resultCard.classList.remove("cardIn");
+      void resultCard.offsetWidth;
+      resultCard.classList.add("cardIn");
 
-      // Slight ember burst
       emberBurst();
     }
 
-    qa(".tab").forEach(btn => btn.addEventListener("click", () => renderMode(btn.dataset.mode)));
-    goBtn.addEventListener("click", reveal);
+    envelopeBtn.addEventListener("click", reveal);
+    rerollBtn.addEventListener("click", reveal);
 
-    q("#resetBtn").addEventListener("click", () => {
-      resultCard.classList.add("hidden");
-      // reset mode inputs quickly
-      renderMode(currentMode);
+    newDirectiveBtn.addEventListener("click", () => {
+      directive.textContent = pick(directives);
+      emberBurst();
     });
 
-    q("#shareBtn").addEventListener("click", async () => {
-      q("#shareHint").classList.remove("hidden");
-      setTimeout(() => q("#shareHint").classList.add("hidden"), 1800);
-
-      // If Web Share API exists, share the page URL
+    shareBtn.addEventListener("click", async () => {
       if (navigator.share) {
         try {
           await navigator.share({
             title: "FIRE HORSE // 2026",
-            text: "Pulled a Fire Horse card 🔥🐴",
+            text: "My Fire Horse fortune 🧧🔥🐴",
             url: location.href
           });
         } catch {}
       }
-    });
-
-    // Dtive refresh
-    q("#newDirectiveBtn").addEventListener("click", () => {
-      q("#directive").textContent = pick(directives);
       emberBurst();
     });
 
-    // Initial render
-    renderMode("fortune");
+    // Initial directive
+    directive.textContent = pick(directives);
 
-    // ----------------------------
-    // Helpers
-    // ----------------------------
-    function q(sel) { return document.querySelector(sel); }
-    function qa(sel) { return Array.from(document.querySelectorAll(sel)); }
-    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
-    function yn(id, label){
-      return `
-        <div class="space-y-2">
-          <label class="text-xs text-white/60 smallcaps">${label}</label>
-          <select id="${id}" class="w-full rounded-2xl bg-white/5 border hairline px-3 py-2 text-sm">
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
-          </select>
-        </div>
-      `;
-    }
-
-    function getZodiacAnimal(year){
-      // If year isn't in our small list, approximate by modulo cycle from 2026 Horse.
-      for (const z of zodiacAnimals) if (z.years.includes(year)) return z.animal;
-
-      const cycle = ["Rat","Ox","Tiger","Rabbit","Dragon","Snake","Horse","Goat","Monkey","Rooster","Dog","Pig"];
-      // 2026 is Horse in our cycle index 6
-      const baseYear = 2026;
-      const baseIdx = 6;
-      const diff = year - baseYear;
-      const idx = (baseIdx + (diff % 12) + 12) % 12;
-      return cycle[idx];
-    }
-
-    // ----------------------------
-    // Embers canvas (lightweight luxury)
-    // ----------------------------
-    const canvas = q("#embers");
+    // ---------- Embers canvas ----------
+    const canvas = document.querySelector("#embers");
     const ctx = canvas.getContext("2d");
-    let W = 0, H = 0;
-    let particles = [];
-    let burst = 0;
+    let W=0, H=0, particles=[], burst=0;
 
     function resize(){
-      W = canvas.width = Math.floor(window.innerWidth * devicePixelRatio);
-      H = canvas.height = Math.floor(window.innerHeight * devicePixelRatio);
+      const dpr = devicePixelRatio || 1;
+      W = canvas.width = Math.floor(innerWidth * dpr);
+      H = canvas.height = Math.floor(innerHeight * dpr);
     }
-    window.addEventListener("resize", resize);
-    resize();
+    addEventListener("resize", resize); resize();
 
-    function spawnParticle(x = Math.random()*W, y = H + 20){
-      const speed = (0.25 + Math.random()*0.9) * devicePixelRatio;
-      return {
-        x, y,
-        vx: (Math.random() - 0.5) * 0.12 * devicePixelRatio,
-        vy: -speed,
-        r: (0.8 + Math.random()*2.4) * devicePixelRatio,
-        a: 0.18 + Math.random()*0.35,
-        life: 260 + Math.random()*220
-      };
+    function spawn(x=Math.random()*W, y=H+20){
+      const dpr = devicePixelRatio || 1;
+      const speed = (0.25 + Math.random()*0.9) * dpr;
+      return { x, y, vx:(Math.random()-0.5)*0.12*dpr, vy:-speed, r:(0.8+Math.random()*2.2)*dpr, a:0.18+Math.random()*0.32, life:240+Math.random()*220 };
     }
-
-    function emberBurst(){
-      burst = 28;
-    }
+    function emberBurst(){ burst = 24; }
 
     function step(){
       ctx.clearRect(0,0,W,H);
+      if (particles.length < 120) particles.push(spawn());
 
-      // add background drift
-      if (particles.length < 140) particles.push(spawnParticle());
-
-      // burst on reveal
       while (burst-- > 0) {
-        particles.push(spawnParticle((W*0.55) + randInt(-140, 140)*devicePixelRatio, (H*0.55) + randInt(-60, 120)*devicePixelRatio));
+        particles.push(spawn((W*0.62)+(Math.random()*260-130), (H*0.50)+(Math.random()*180-40)));
       }
       burst = Math.max(burst, 0);
 
-      // draw
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy *= 0.9992;
-        p.life -= 1;
+      for (const p of particles){
+        p.x += p.vx; p.y += p.vy; p.vy *= 0.9992; p.life -= 1;
 
-        // fade out near top
-        const fade = clamp(p.y / (H * 0.7), 0, 1);
+        const fade = Math.max(0, Math.min(1, p.y / (H*0.72)));
         const alpha = p.a * fade;
 
-        // ember color blend
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         ctx.fillStyle = `rgba(255, 90, 31, ${alpha})`;
         ctx.fill();
 
-        // tiny gold highlight sometimes
-        if (Math.random() < 0.02) {
+        if (Math.random() < 0.02){
           ctx.beginPath();
           ctx.arc(p.x + p.r*0.7, p.y - p.r*0.4, p.r*0.45, 0, Math.PI*2);
           ctx.fillStyle = `rgba(255, 196, 100, ${alpha*0.7})`;
@@ -600,26 +409,10 @@
         }
       }
 
-      // cull old
-      particles = particles.filter(p => p.life > 0 && p.y > -30);
-
+      particles = particles.filter(p => p.life > 0 && p.y > -40);
       requestAnimationFrame(step);
     }
     step();
-
-    let lastShake = 0;
-    window.addEventListener("devicemotion", (e) => {
-      if (currentMode !== "fortune") return;
-      const acc = e.accelerationIncludingGravity;
-      if (!acc) return;
-      const mag = Math.abs(acc.x||0) + Math.abs(acc.y||0) + Math.abs(acc.z||0);
-      const now = Date.now();
-      if (mag > 28 && now - lastShake > 900) {
-        lastShake = now;
-        reveal();
-      }
-    });
   </script>
 </body>
 </html>
-
