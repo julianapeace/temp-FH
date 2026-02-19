@@ -71,7 +71,7 @@
           FIRE HORSE <span class="text-white/55">// 2026</span>
         </h1>
         <p class="text-white/70 max-w-xl">
-          A one-time novelty: pull a fortune, measure your luck, mirror your zodiac, check your ex, or get roasted —
+          Pull a fortune, measure your luck, mirror your zodiac, or check your ex —
           all under Fire Horse energy.
         </p>
       </div>
@@ -94,7 +94,6 @@
     <section class="mt-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
       <!-- Horse Hero -->
       <div class="glass rounded-3xl p-6 lg:col-span-2 relative overflow-hidden">
-        <div class="smallcaps text-[11px] text-white/70">High fashion mascot</div>
         <div class="mt-4 flex items-center justify-center">
           <!-- Minimal horse silhouette SVG -->
           <svg class="horse w-[260px] md:w-[320px]" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fire Horse silhouette">
@@ -127,13 +126,6 @@
           </svg>
         </div>
 
-        <div class="mt-6 space-y-2">
-          <div class="smallcaps text-[11px] text-white/60">Aesthetic notes</div>
-          <div class="text-sm text-white/70">
-            Charcoal base. Ember glow. Minimal silhouette. Soft motion. Zero clutter.
-          </div>
-        </div>
-
         <div class="mt-6 flex gap-2">
           <button id="shareBtn" class="btn rounded-2xl px-4 py-2 text-sm font-medium">Share</button>
           <button id="resetBtn" class="rounded-2xl px-4 py-2 text-sm text-white/70 border hairline hover:text-white">Reset</button>
@@ -151,7 +143,6 @@
           <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="luck">Luck</button>
           <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="zodiac">Zodiac</button>
           <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="ex">Ex</button>
-          <button class="tab rounded-2xl px-3 py-2 text-xs md:text-sm" data-mode="roast">Roast</button>
         </div>
 
         <!-- Inputs -->
@@ -161,7 +152,6 @@
               <div id="modeTitle" class="text-xl font-semibold">Shake the Fortune</div>
               <div id="modeDesc" class="text-sm text-white/70 mt-1">Click to reveal your Fire Horse fortune card.</div>
             </div>
-            <div class="smallcaps text-[11px] text-white/60 hidden md:block">one-time novelty</div>
           </div>
 
           <div id="inputs" class="mt-5 space-y-4">
@@ -170,7 +160,6 @@
 
           <div class="mt-5 flex gap-2">
             <button id="goBtn" class="btn rounded-2xl px-4 py-2 text-sm font-medium">Reveal</button>
-            <button id="rerollBtn" class="rounded-2xl px-4 py-2 text-sm text-white/70 border hairline hover:text-white">Reroll</button>
           </div>
         </div>
 
@@ -204,10 +193,6 @@
             </div>
           </div>
         </div>
-
-        <div class="text-xs text-white/50 px-1">
-          Livestream tip: ask chat to type <span class="text-white/70">“REROLL”</span> and slam the button.
-        </div>
       </div>
     </section>
   </main>
@@ -238,17 +223,6 @@
       "You’ll be underestimated — which is exactly your advantage.",
       "Someone is about to match your energy. Don’t dim first.",
       "A lucky coincidence is just prepared momentum."
-    ];
-
-    const roasts = [
-      "{name}, in the Year of the Fire Horse, you don’t need another plan — you need a launch.",
-      "{name}, your goal is cute. Now execute like you’re out of patience.",
-      "{name}, stop romanticizing potential. Ship something that exists.",
-      "{name}, you’re not ‘busy’ — you’re context switching. Be mean to distractions.",
-      "{name}, if your goal is {goal}, the first step is to stop negotiating with yourself.",
-      "{name}, you said loud, do it fast, then disappear.",
-      "{name}, you’re one decisive morning away from being unstoppable.",
-      "{name}, the thing blocking {goal} is not skill. It’s hesitation dressed as research."
     ];
 
     // Simple zodiac mapping for convenience (you can expand copy live)
@@ -306,11 +280,11 @@
     // ----------------------------
     const modes = {
       fortune: {
-        title: "Shake the Fortune",
+        title: "Your Fortune",
         desc: "Click to reveal your Fire Horse fortune card.",
         inputs: () => `
           <div class="text-white/70 text-sm">
-            Press <span class="text-white/90 font-medium">Reveal</span> to pull a fortune. Press <span class="text-white/90 font-medium">Reroll</span> for chaos.
+            Click <span class="text-white/90 font-medium">Reveal</span> to pull your fortune.
           </div>
         `,
         generate: () => {
@@ -439,39 +413,6 @@
             avoid: "late-night nostalgia",
           };
         }
-      },
-
-      roast: {
-        title: "AI Lunar Roast",
-        desc: "Type your name + goal. We print a luxury roast receipt.",
-        inputs: () => `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div class="space-y-2">
-              <label class="text-xs text-white/60 smallcaps">Name</label>
-              <input id="name" placeholder="e.g. Juliana"
-                class="w-full rounded-2xl bg-white/5 border hairline px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/20">
-            </div>
-            <div class="space-y-2">
-              <label class="text-xs text-white/60 smallcaps">Goal for 2026</label>
-              <input id="goal" placeholder="e.g. ship a throwaway app on stream"
-                class="w-full rounded-2xl bg-white/5 border hairline px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-white/20">
-            </div>
-          </div>
-          <div class="text-xs text-white/50">No real AI calls needed — it’s “fake AI” with premium delivery.</div>
-        `,
-        generate: () => {
-          const name = (q("#name")?.value ?? "Bestie").trim() || "Bestie";
-          const goal = (q("#goal")?.value ?? "something iconic").trim() || "something iconic";
-          const template = pick(roasts);
-          const body = template.replaceAll("{name}", name).replaceAll("{goal}", goal);
-
-          return {
-            headline: "Roast receipt printed.",
-            body,
-            lucky: `${pick(luckyColors)} · ${pick(luckyNumbers)}`,
-            avoid: "overthinking (again)",
-          };
-        }
       }
     };
 
@@ -484,7 +425,6 @@
     const modeDesc = q("#modeDesc");
     const inputs = q("#inputs");
     const goBtn = q("#goBtn");
-    const rerollBtn = q("#rerollBtn");
 
     const resultCard = q("#resultCard");
     const resultHeadline = q("#resultHeadline");
@@ -503,7 +443,6 @@
       // inputs
       inputs.innerHTML = modes[modeKey].inputs();
       // hide old result until user reveals
-      // (optional: keep result visible and reroll updates it)
     }
 
     function reveal() {
@@ -525,7 +464,6 @@
 
     qa(".tab").forEach(btn => btn.addEventListener("click", () => renderMode(btn.dataset.mode)));
     goBtn.addEventListener("click", reveal);
-    rerollBtn.addEventListener("click", reveal);
 
     q("#resetBtn").addEventListener("click", () => {
       resultCard.classList.add("hidden");
@@ -669,8 +607,6 @@
     }
     step();
 
-    // Bonus: “shake” support for Fortune mode on mobile
-    // (Very basic + safe fallback)
     let lastShake = 0;
     window.addEventListener("devicemotion", (e) => {
       if (currentMode !== "fortune") return;
